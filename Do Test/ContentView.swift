@@ -19,11 +19,6 @@ struct ContentView: View {
             Spacer()
         }
         .padding(.top, 50)
-        // deleted old features
-        
-        //and added new features
-        
-        //Added one more feature
     }
 }
 
