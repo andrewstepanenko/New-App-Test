@@ -27,9 +27,10 @@ struct ContentView: View {
                     }
                 }
                 .padding(20)
-                .background(Color.black.opacity(0.075))
+                .background(Color.black.opacity(0.1))
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 .frame(height: 200)
+                .shadow(color: Color("shadowColor").opacity(0.25), radius: 0, x: 0, y: 0)
                 
                 //.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
