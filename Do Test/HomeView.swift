@@ -9,19 +9,35 @@ import SwiftUI
 
 struct HomeView: View {
     @State var createNewTask = false
-
+    
     var body: some View {
         ZStack {
             Color("bgColor").ignoresSafeArea()
-            Text("Your tasks")
-                .font(.system(size: 35, weight: .bold))
-                .frame(maxWidth: .infinity,maxHeight: .infinity, alignment: .topLeading)
-                .padding(.leading, 20)
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Welcome back,")
+                    .font(.system(size: 30, weight: .light))
+                
+                Text("User")
+                    .font(.system(size: 30, weight: .bold))
+                    .frame(maxWidth: .infinity,maxHeight: .infinity, alignment: .topLeading)
+            }
+            .padding(20)
             
             List(tasks) { task in
                 TaskRow(task: task)
             }
-            .padding(.top, 50)
+            .padding(.top, 100)
+            
+            Color.black.opacity(createNewTask ? 0.75 : 0).ignoresSafeArea()
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                        createNewTask.toggle()
+                    }
+                }
+            
+            addTaskView(createNewTask: $createNewTask)
+                .offset(x: 0, y: createNewTask ? 200 : 1000)
+                .opacity(createNewTask ? 1 : 0)
             
             Group {
                 Button {
@@ -34,10 +50,6 @@ struct HomeView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-            
-            addTaskView(createNewTask: $createNewTask)
-                .scaleEffect(createNewTask ? 1 : 0)
-                .opacity(createNewTask ? 1 : 0)
         }
     }
 }
@@ -55,6 +67,7 @@ struct plusBtn: View {
         VStack {
             Image(systemName: "plus")
                 .font(.system(size: 25, weight: .bold))
+                .foregroundColor(.primary)
                 .rotationEffect(Angle.degrees(createNewTask ? -45 : 0))
         }
         .clipShape(
@@ -67,7 +80,6 @@ struct plusBtn: View {
         .padding(.trailing, 20)
         .padding(.bottom, 30)
         .scaleEffect(createNewTask ? 1.5 : 1)
-        //.frame(maxWidth: .infinity, alignment: .trailing)
     }
 }
 
@@ -80,52 +92,24 @@ struct addTaskView: View {
     
     var body: some View {
         VStack {
-            HStack(spacing: 20) {
-                Text("Add new task")
-                    .font(.system(size: 25, weight: .bold))
-                
-                Image(systemName: "pencil")
-                    .font(.system(size: 25, weight: .bold))
-            }
-            .padding(.top, 20)
-            Spacer()
             
-            HStack(spacing: 50) {
-                Button {
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                        createNewTask.toggle()
-                    }
-                } label: {
-                    Text("Cancel")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(width: 100, height: 30)
-                        .background(Color.gray.opacity(0.75), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-                }
+            VStack(spacing: 15) {
+                Text("Create a new item")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 30, weight: .bold))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(25)
                 
-                
-                Button {
-                    withAnimation(.spring(response: 0.8, dampingFraction: 0.1)) {
-                        addNewTask()
-                    }
-                    
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                        createNewTask.toggle()
-                    }
-                } label: {
-                    Text("Add")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(width: 100, height: 30)
-                        .background(Color.blue, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-                }
-                
+                addItemButton(createNewTask: $createNewTask)
+                addItemButton(createNewTask: $createNewTask)
+                addItemButton(createNewTask: $createNewTask)
+                addItemButton(createNewTask: $createNewTask)
             }
-            .padding(.bottom, 20)
-            
+            .frame(maxHeight: .infinity, alignment: .top)
         }
-        .frame(width: 350, height: 250)
-        .background(.gray.opacity(0.75), in: RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .frame(maxWidth: .infinity)
+        .frame(height: 750)
+        .background(Color("bgColor"), in: RoundedRectangle(cornerRadius: 30, style: .continuous))
     }
 }
 
@@ -136,15 +120,47 @@ struct Task: Identifiable {
 
 struct TaskRow: View {
     var task: Task
-
+    
     var body: some View {
         Text(task.name)
     }
 }
 
 var tasks = [
-        Task(name: "First task"),
-        Task(name: "Second task"),
-        Task(name: "Third task")
-    ]
+    Task(name: "First task"),
+    Task(name: "Second task"),
+    Task(name: "Third task")
+]
 
+
+struct addItemButton: View {
+    @Binding var createNewTask: Bool
+    var body: some View {
+        
+        Button {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                addNewTask()
+                createNewTask.toggle()
+            }
+        } label: {
+            HStack(spacing: 15) {
+                Image(systemName: "list.clipboard.fill")
+                    .font(.system(size: 25, weight: .medium))
+                
+                Color.black.opacity(0.25)
+                    .frame(width: 1, height: 50)
+                    .cornerRadius(10)
+                
+                Text("Add item")
+                    .font(.system(size: 25, weight: .medium))
+            }
+            .foregroundColor(.primary)
+            .frame(height: 80)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 30)
+            .background(Color.gray.opacity(0.4))
+            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            .padding(.horizontal, 20)
+        }
+    }
+}

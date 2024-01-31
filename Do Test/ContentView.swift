@@ -13,26 +13,24 @@ struct ContentView: View {
         ZStack {
             Color("bgColor").ignoresSafeArea()
             VStack(spacing: 30) {
-                    VStack(spacing: 5) {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 30, weight: .bold))
-                        Text("Hello, user!")
-                            .font(.system(size: 30, weight: .bold))
-                    }
-                    
-                    Button {
-                        checkForPermisson()
-                    } label: {
-                        requestNotificationsBtn()
-                    }
+                VStack(spacing: 5) {
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 30, weight: .bold))
+                    Text("Hello, user!")
+                        .font(.system(size: 30, weight: .bold))
                 }
-                .padding(20)
-                .background(Color.black.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                .frame(height: 200)
-                .shadow(color: Color("shadowColor").opacity(0.25), radius: 0, x: 0, y: 0)
                 
-                //.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                Button {
+                    checkForPermisson()
+                } label: {
+                    requestNotificationsBtn()
+                }
+            }
+            .padding(20)
+            .background(Color.black.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            .frame(height: 200)
+            .shadow(color: Color("shadowColor").opacity(0.25), radius: 0, x: 0, y: 0)
         }
     }
 }
@@ -72,8 +70,8 @@ func checkForPermisson() {
             }
         case .denied:
             return
-
-         default:
+            
+        default:
             return
         }
     }
